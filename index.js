@@ -1,11 +1,22 @@
+require('dotenv').config();
+require('express-async-errors');
+
 const express=require('express');
 const connectDB = require('./db/connect');
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
 const app= express();
-require('dotenv').config();
+
+app.use(express.json());
 
 app.get("/",(req,res)=>{
     res.status(200).send("API for ProjectDB")
 })
+
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const port= process.env.PORT ?? 5000;
 
