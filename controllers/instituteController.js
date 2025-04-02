@@ -1,13 +1,37 @@
-const getAllInstitutes=(req,res)=>{
-    res.status(200).send("Get all Institutes");
+const { StatusCodes } = require("http-status-codes");
+const Institute = require("../models/Institute");
+
+const getAllInstitutes= async (req,res)=>{
+    const {name,role}=req.query;
+    const queryObj={}
+
+    if(name){
+        queryObj.name= {$regex:name,$options:'i'}
+    }
+    if(role){
+        queryObj.role=role
+    }
+
+    const institutes= await Institute.find(queryObj).select('-password')
+
+    res.status(StatusCodes.OK).json({institutes,count:institutes.length});
 }
 
-const getSingleInstitute=(req,res)=>{
-    res.status(200).send("Get an Institute");
+const getSingleInstitute= async (req,res)=>{
+    const institute= await Institute.findOne({_id:req.params.id}).select('-password')
+
+    if(!institute){
+        res.status(StatusCodes.NOT_FOUND).json({msg:`No institute with id ${req.params.id}`})
+        return;
+    }
+    res.status(StatusCodes.OK).json({institute});
 }
-const createInstitute=(req,res)=>{
-    res.status(200).send("Create an Institute");
+
+const createInstitute=async (req,res)=>{
+    const institute= await Institute.create(req.body);
+    res.status(200).json({institute:{name:institute.name}});
 }
+
 const deleteInstitute=(req,res)=>{
     res.status(200).send("Delete an Institute");
 }
