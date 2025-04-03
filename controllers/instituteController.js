@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const Institute = require("../models/Institute");
+const NotFoundError = require("../errors/not-found");
 
 const getAllInstitutes= async (req,res)=>{
     const {name,role}=req.query;
@@ -18,12 +19,13 @@ const getAllInstitutes= async (req,res)=>{
 }
 
 const getSingleInstitute= async (req,res)=>{
+    
     const institute= await Institute.findOne({_id:req.params.id}).select('-password')
 
     if(!institute){
-        res.status(StatusCodes.NOT_FOUND).json({msg:`No institute with id ${req.params.id}`})
-        return;
+        throw new NotFoundError(`No institute with id ${req.params.id}`);
     }
+
     res.status(StatusCodes.OK).json({institute});
 }
 
