@@ -31,7 +31,7 @@ const getSingleInstitute= async (req,res)=>{
 
 const createInstitute=async (req,res)=>{
     const institute= await Institute.create(req.body);
-    res.status(200).json({institute:{name:institute.name}});
+    res.status(StatusCodes.CREATED).json({institute:{name:institute.name}});
 }
 
 const deleteInstitute=(req,res)=>{
