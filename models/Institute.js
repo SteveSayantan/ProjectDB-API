@@ -1,6 +1,7 @@
 const mongoose=require('mongoose')
 const {isEmail}=require('validator')
 const bcrypt=require('bcryptjs')
+const jwt=require('jsonwebtoken')
 
 const InstituteSchema= new mongoose.Schema({
     name:{
@@ -41,5 +42,13 @@ InstituteSchema.pre('save', async function (){
     const salt= await bcrypt.genSalt();     // defaults to 10
     this.password= await bcrypt.hash(this.password, salt);
 })
+
+InstituteSchema.methods.createJWT= function(){
+    return jwt.sign({instituteId:this._id,role:this.role,name:this.name},process.env.JWT_SECRET,{expiresIn:process.env.JWT_LIFETIME}); 
+}
+
+InstituteSchema.methods.comparePassword= async function(givenPassword){
+    return await bcrypt.compare(givenPassword,this.password); 
+}
 
 module.exports=mongoose.model('Institute',InstituteSchema);
