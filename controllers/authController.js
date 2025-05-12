@@ -2,14 +2,14 @@ const validator = require("validator");
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const cookieOptions = require("../utils/cookieOptions");
-const validateSignUpData = require("../utils/validateSignupData");
+const validateProfileData = require("../utils/validateProfileData");
 const bcrypt = require("bcrypt");
 const AppError = require("../utils/AppError");
 
 const signup = async (req, res, next) => {
     const userObj = req.body;
     try {
-        validateSignUpData(userObj);
+        validateProfileData(userObj);
 
         userObj.password = await bcrypt.hash(userObj.password, 10);
 

@@ -1,7 +1,7 @@
 const validator = require("validator");
 const AppError = require("./AppError");
 
-function validateSignUpData(data) {
+function validateProfileData(data) {
     if (!data.name || typeof data.name !== "string") {
         throw new AppError("Name is required", 400);
     }
@@ -18,4 +18,4 @@ function validateSignUpData(data) {
     }
 }
 
-module.exports = validateSignUpData;
+module.exports = validateProfileData;
