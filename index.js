@@ -2,6 +2,8 @@ require('dotenv').config();
 require('express-async-errors');
 
 const express=require('express');
+const multer= require('multer')
+
 const connectDB = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -12,8 +14,11 @@ const instituteRouter=require('./routes/instituteRoutes')
 const app= express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended:true}))    // to handle application/x-www-form-urlencoded
+app.use(multer().none());   // to handle multipart/form-data
 
-app.get("/",(req,res)=>{
+
+app.get("/api/v1",(req,res)=>{
     res.status(200).send("API for ProjectDB")
 })
 
