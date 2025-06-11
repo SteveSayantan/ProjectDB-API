@@ -39,7 +39,7 @@ const InstituteSchema= new mongoose.Schema({
 InstituteSchema.pre('save', async function (){
     if (!this.isModified('password')) return;
 
-    const salt= await bcrypt.genSalt();     // defaults to 10
+    const salt= await bcrypt.genSalt();     // defaults to 10 rounds
     this.password= await bcrypt.hash(this.password, salt);
 })
 
